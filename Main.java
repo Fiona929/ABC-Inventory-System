@@ -688,11 +688,57 @@ public class Main {
 
         int choice = getValidIntInput(scanner);
 
+        switch (choice) {
+            case 1:
+                modifyClerkEmail(scanner, clerk);
+                break;
+            case 2:
+                modifyClerkAddress(scanner, clerk);
+                break;
+            case 3:
+                modifyClerkManagerStatus(scanner, clerk);
+                break;
+            case 4:
+                System.out.println("Modification cancelled.");
+                return;
+            default:
+                System.out.println("Invalid choice. Modification cancelled.");
+                return;
+        }
+
         // Display updated clerk information after modification
         System.out.println("\nUpdated Clerk Information:");
         clerk.displayClerkInfoTable();
     }
     
+    private static void modifyClerkEmail(Scanner scanner, InventoryClerk clerk) {
+        System.out.print("Enter new email: ");
+        String newEmail = scanner.nextLine();
+        clerk.modifyEmail(newEmail);
+    }
+
+    private static void modifyClerkAddress(Scanner scanner, InventoryClerk clerk) {
+        System.out.print("Enter new street: ");
+        String street = scanner.nextLine();
+        System.out.print("Enter new city: ");
+        String city = scanner.nextLine();
+        System.out.print("Enter new state: ");
+        String state = scanner.nextLine();
+        System.out.print("Enter new postcode: ");
+        int postcode = getValidIntInput(scanner);
+        System.out.print("Enter new country: ");
+        String country = scanner.nextLine();
+
+        Address newAddress = new Address(street, city, state, postcode, country);
+        clerk.modifyAddress(newAddress);
+    }
+
+    private static void modifyClerkManagerStatus(Scanner scanner, InventoryClerk clerk) {
+        System.out.print("Set as manager? (true/false): ");
+        boolean isManager = Boolean.parseBoolean(scanner.nextLine());
+        clerk.modifyManagerStatus(isManager);
+    }
+
     //View Inventory Clerk 
     private static void viewInventoryClerk(Scanner scanner) {
         System.out.println("\nViewing Inventory Clerk:");
