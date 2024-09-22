@@ -258,6 +258,29 @@ public InventoryClerk(int clerkID, String firstName, String lastName, String gen
             }
         }
     }
+
+    // Method to modify manager status
+    public boolean modifyManagerStatus(boolean isManager) {
+        String query = "UPDATE inventoryclerk SET isManager = ? WHERE clerkID = ?";
+        try (Connection conn = SQLConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setBoolean(1, isManager);
+            stmt.setInt(2, this.clerkID);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                this.isManager = isManager;
+                System.out.println("Manager status updated successfully.");
+                return true;
+            } else {
+                System.out.println("Failed to update manager status. Clerk ID not found.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating manager status: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
     
     // Display clerk info 
     public void displayClerkInfoTable() {
@@ -360,28 +383,6 @@ public InventoryClerk(int clerkID, String firstName, String lastName, String gen
         System.out.println("Address: " + address.getFullAddress());
         System.out.println("Manager: " + (isManager ? "Yes" : "No"));
     }   
-    // Method to modify manager status
-    public boolean modifyManagerStatus(boolean isManager) {
-        String query = "UPDATE inventoryclerk SET isManager = ? WHERE clerkID = ?";
-        try (Connection conn = SQLConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setBoolean(1, isManager);
-            stmt.setInt(2, this.clerkID);
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                this.isManager = isManager;
-                System.out.println("Manager status updated successfully.");
-                return true;
-            } else {
-                System.out.println("Failed to update manager status. Clerk ID not found.");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error updating manager status: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     // Method to add a new clerk
     public static boolean addClerk(String firstName, String lastName, String gender, Address address, String email, String password, boolean isManager) {
@@ -429,4 +430,3 @@ public InventoryClerk(int clerkID, String firstName, String lastName, String gen
     }
 
 }
-
